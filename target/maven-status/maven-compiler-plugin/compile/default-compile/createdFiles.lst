@@ -1,0 +1,15 @@
+com\example\crawler\config\ThreadPoolConfig.class
+com\example\crawler\util\ContactExtractor.class
+com\example\crawler\repository\CompanyRepository.class
+com\example\crawler\CrawlerApplication.class
+com\example\crawler\service\CrawlerService.class
+com\example\crawler\model\Company.class
+com\example\crawler\controller\CrawlerController.class
+com\example\crawler\config\CrawlerConfig.class
+com\example\crawler\model\CrawlTask$CrawlStatus.class
+com\example\crawler\controller\DataController.class
+com\example\crawler\util\HtmlParser.class
+com\example\crawler\service\WebClientService.class
+com\example\crawler\service\SchedulerService.class
+com\example\crawler\model\CrawlTask.class
+com\example\crawler\service\DataProcessingService.class

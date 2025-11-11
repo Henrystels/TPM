@@ -1,0 +1,52 @@
+2025-11-11 17:44:02 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Значение слишком длинное для поля "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/6CC8556B/online/20251101/project13... (282)"
+Value too long for column "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/6CC8556B/online/20251101/project13... (282)"; SQL statement:
+insert into companies (id, address, crawled_at, description, name, source_url, website) values (default, ?, ?, ?, ?, ?, ?) [22001-212]
+2025-11-11 17:44:26 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Значение слишком длинное для поля "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/A897B376/online/20251101/project13... (270)"
+Value too long for column "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/A897B376/online/20251101/project13... (270)"; SQL statement:
+insert into companies (id, address, crawled_at, description, name, source_url, website) values (default, ?, ?, ?, ?, ?, ?) [22001-212]
+2025-11-11 17:44:41 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Значение слишком длинное для поля "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/17B405E3/online/20251101/project13... (266)"
+Value too long for column "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/17B405E3/online/20251101/project13... (266)"; SQL statement:
+insert into companies (id, address, crawled_at, description, name, source_url, website) values (default, ?, ?, ?, ?, ?, ?) [22001-212]
+2025-11-11 17:44:43 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Значение слишком длинное для поля "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/25CCDFB8/online/20251101/project13... (267)"
+Value too long for column "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/25CCDFB8/online/20251101/project13... (267)"; SQL statement:
+insert into companies (id, address, crawled_at, description, name, source_url, website) values (default, ?, ?, ?, ?, ?, ?) [22001-212]
+2025-11-11 17:50:57 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Значение слишком длинное для поля "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/DA14AFB6/online/20251101/project13... (282)"
+Value too long for column "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/DA14AFB6/online/20251101/project13... (282)"; SQL statement:
+insert into companies (id, address, crawled_at, description, name, source_url, website) values (default, ?, ?, ?, ?, ?, ?) [22001-212]
+2025-11-11 17:51:08 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Значение слишком длинное для поля "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/A897B376/online/20251101/project13... (270)"
+Value too long for column "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/A897B376/online/20251101/project13... (270)"; SQL statement:
+insert into companies (id, address, crawled_at, description, name, source_url, website) values (default, ?, ?, ?, ?, ?, ?) [22001-212]
+2025-11-11 17:51:26 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Значение слишком длинное для поля "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/17B405E3/online/20251101/project13... (266)"
+Value too long for column "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/17B405E3/online/20251101/project13... (266)"; SQL statement:
+insert into companies (id, address, crawled_at, description, name, source_url, website) values (default, ?, ?, ?, ?, ?, ?) [22001-212]
+2025-11-11 17:51:29 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Значение слишком длинное для поля "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/25CCDFB8/online/20251101/project13... (267)"
+Value too long for column "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/25CCDFB8/online/20251101/project13... (267)"; SQL statement:
+insert into companies (id, address, crawled_at, description, name, source_url, website) values (default, ?, ?, ?, ?, ?, ?) [22001-212]
+2025-11-11 17:52:02 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Значение слишком длинное для поля "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/F22D280C/online/20251101/project13... (275)"
+Value too long for column "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/F22D280C/online/20251101/project13... (275)"; SQL statement:
+insert into companies (id, address, crawled_at, description, name, source_url, website) values (default, ?, ?, ?, ?, ?, ?) [22001-212]
+2025-11-11 18:16:50 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Значение слишком длинное для поля "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/DA14AFB6/online/20251101/project13... (282)"
+Value too long for column "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/DA14AFB6/online/20251101/project13... (282)"; SQL statement:
+insert into companies (id, address, crawled_at, description, name, source_url, website) values (default, ?, ?, ?, ?, ?, ?) [22001-212]
+2025-11-11 18:17:13 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Значение слишком длинное для поля "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/A897B376/online/20251101/project13... (270)"
+Value too long for column "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/A897B376/online/20251101/project13... (270)"; SQL statement:
+insert into companies (id, address, crawled_at, description, name, source_url, website) values (default, ?, ?, ?, ?, ?, ?) [22001-212]
+2025-11-11 18:17:28 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Значение слишком длинное для поля "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/17B405E3/online/20251101/project13... (266)"
+Value too long for column "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/17B405E3/online/20251101/project13... (266)"; SQL statement:
+insert into companies (id, address, crawled_at, description, name, source_url, website) values (default, ?, ?, ?, ?, ?, ?) [22001-212]
+2025-11-11 18:17:31 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Значение слишком длинное для поля "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/25CCDFB8/online/20251101/project13... (267)"
+Value too long for column "NAME CHARACTER VARYING(255)": "'Unknown Company from http://link.2gis.ru/1.2/25CCDFB8/online/20251101/project13... (267)"; SQL statement:
+insert into companies (id, address, crawled_at, description, name, source_url, website) values (default, ?, ?, ?, ?, ?, ?) [22001-212]

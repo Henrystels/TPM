@@ -1,0 +1,14 @@
+C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\util\ContactExtractor.java
+C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\controller\DataController.java
+C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\service\DataProcessingService.java
+C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\CrawlerApplication.java
+C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\model\Company.java
+C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\repository\CompanyRepository.java
+C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\service\SchedulerService.java
+C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\service\CrawlerService.java
+C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\controller\CrawlerController.java
+C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\model\CrawlTask.java
+C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\config\ThreadPoolConfig.java
+C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\service\WebClientService.java
+C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\util\HtmlParser.java
+C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\config\CrawlerConfig.java
