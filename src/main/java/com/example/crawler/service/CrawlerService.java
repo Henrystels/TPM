@@ -26,6 +26,8 @@ public class CrawlerService {
     private final ContactExtractor contactExtractor;
     private final HtmlParser htmlParser;
     private final WebClientService webClientService;
+    private final RestTemplateService restTemplateService;
+    private final com.example.crawler.client.HtmlFetchClient htmlFetchClient;
     
     private final Map<String, CrawlTask> activeTasks = new ConcurrentHashMap<>();
     private final Set<String> visitedUrls = Collections.newSetFromMap(new ConcurrentHashMap<>());
@@ -35,12 +37,16 @@ public class CrawlerService {
                          CompanyRepository companyRepository,
                          ContactExtractor contactExtractor,
                          HtmlParser htmlParser,
-                         WebClientService webClientService) {
+                         WebClientService webClientService,
+                         RestTemplateService restTemplateService,
+                         com.example.crawler.client.HtmlFetchClient htmlFetchClient) {
         this.crawlerExecutor = crawlerExecutor;
         this.companyRepository = companyRepository;
         this.contactExtractor = contactExtractor;
         this.htmlParser = htmlParser;
         this.webClientService = webClientService;
+        this.restTemplateService = restTemplateService;
+        this.htmlFetchClient = htmlFetchClient;
     }
     
     public String startCrawling(List<String> startUrls) {
@@ -87,6 +93,14 @@ public class CrawlerService {
                 logger.info("Crawling: {}", currentUrl);
                 
                 String htmlContent = webClientService.fetchHtmlContent(currentUrl).block();
+                if (htmlContent == null || htmlContent.isEmpty()) {
+                    htmlContent = restTemplateService.fetchHtmlContent(currentUrl);
+                }
+                if (htmlContent == null || htmlContent.isEmpty()) {
+                    try {
+                        htmlContent = htmlFetchClient.fetch(currentUrl, "CompanyCrawler/1.0");
+                    } catch (Exception ignore) {}
+                }
                 if (htmlContent == null || htmlContent.isEmpty()) {
                     htmlContent = htmlParser.fetchHtmlContent(currentUrl);
                 }

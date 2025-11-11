@@ -9,6 +9,8 @@ C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\service\Cr
 C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\controller\CrawlerController.java
 C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\model\CrawlTask.java
 C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\config\ThreadPoolConfig.java
+C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\client\HtmlFetchClient.java
+C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\service\RestTemplateService.java
 C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\service\WebClientService.java
 C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\util\HtmlParser.java
 C:\Users\henry\Documents\GitHub\TPM\src\main\java\com\example\crawler\config\CrawlerConfig.java
