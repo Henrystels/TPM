@@ -9,7 +9,6 @@
 - Maven 3.8+
 - Windows PowerShell (для примеров ниже)
 
-Путь проекта: `C:\Users\henry\Documents\GitHub\TPM`
 
 ## 2) Запуск приложения
 
