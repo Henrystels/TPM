@@ -5,10 +5,14 @@ import com.example.crawler.model.CrawlTask;
 import com.example.crawler.repository.CompanyRepository;
 import com.example.crawler.util.ContactExtractor;
 import com.example.crawler.util.HtmlParser;
+import com.example.crawler.util.TracingUtil;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,6 +33,17 @@ public class CrawlerService {
     private final RestTemplateService restTemplateService;
     private final com.example.crawler.client.HtmlFetchClient htmlFetchClient;
     
+    // Metrics
+    private final Timer parsingTimer;
+    private final Timer htmlFetchTimer;
+    private final Timer databaseSaveTimer;
+    private final Counter parsingSuccessCounter;
+    private final Counter parsingErrorCounter;
+    private final Counter databaseRecordsCounter;
+    private final Counter pagesCrawledCounter;
+    private final Counter urlsVisitedCounter;
+    private final TracingUtil tracingUtil;
+    
     private final Map<String, CrawlTask> activeTasks = new ConcurrentHashMap<>();
     private final Set<String> visitedUrls = Collections.newSetFromMap(new ConcurrentHashMap<>());
     private final AtomicInteger totalPagesCrawled = new AtomicInteger(0);
@@ -39,7 +54,16 @@ public class CrawlerService {
                          HtmlParser htmlParser,
                          WebClientService webClientService,
                          RestTemplateService restTemplateService,
-                         com.example.crawler.client.HtmlFetchClient htmlFetchClient) {
+                         com.example.crawler.client.HtmlFetchClient htmlFetchClient,
+                         Timer parsingTimer,
+                         Timer htmlFetchTimer,
+                         Timer databaseSaveTimer,
+                         Counter parsingSuccessCounter,
+                         Counter parsingErrorCounter,
+                         Counter databaseRecordsCounter,
+                         Counter pagesCrawledCounter,
+                         Counter urlsVisitedCounter,
+                         TracingUtil tracingUtil) {
         this.crawlerExecutor = crawlerExecutor;
         this.companyRepository = companyRepository;
         this.contactExtractor = contactExtractor;
@@ -47,6 +71,15 @@ public class CrawlerService {
         this.webClientService = webClientService;
         this.restTemplateService = restTemplateService;
         this.htmlFetchClient = htmlFetchClient;
+        this.parsingTimer = parsingTimer;
+        this.htmlFetchTimer = htmlFetchTimer;
+        this.databaseSaveTimer = databaseSaveTimer;
+        this.parsingSuccessCounter = parsingSuccessCounter;
+        this.parsingErrorCounter = parsingErrorCounter;
+        this.databaseRecordsCounter = databaseRecordsCounter;
+        this.pagesCrawledCounter = pagesCrawledCounter;
+        this.urlsVisitedCounter = urlsVisitedCounter;
+        this.tracingUtil = tracingUtil;
     }
     
     public String startCrawling(List<String> startUrls) {
@@ -88,29 +121,50 @@ public class CrawlerService {
             visitedUrls.add(currentUrl);
             task.incrementPagesCrawled();
             totalPagesCrawled.incrementAndGet();
+            pagesCrawledCounter.increment();
+            urlsVisitedCounter.increment();
             
             try {
                 logger.info("Crawling: {}", currentUrl);
                 
-                String htmlContent = webClientService.fetchHtmlContent(currentUrl).block();
-                if (htmlContent == null || htmlContent.isEmpty()) {
-                    htmlContent = restTemplateService.fetchHtmlContent(currentUrl);
-                }
-                if (htmlContent == null || htmlContent.isEmpty()) {
-                    try {
-                        htmlContent = htmlFetchClient.fetch(currentUrl, "CompanyCrawler/1.0");
-                    } catch (Exception ignore) {}
-                }
-                if (htmlContent == null || htmlContent.isEmpty()) {
-                    htmlContent = htmlParser.fetchHtmlContent(currentUrl);
-                }
+                // Trace HTML fetch
+                String htmlContent = tracingUtil.trace("fetch_html", () -> 
+                    htmlFetchTimer.recordCallable(() -> {
+                        String content = webClientService.fetchHtmlContent(currentUrl).block();
+                        if (content == null || content.isEmpty()) {
+                            content = restTemplateService.fetchHtmlContent(currentUrl);
+                        }
+                        if (content == null || content.isEmpty()) {
+                            try {
+                                content = htmlFetchClient.fetch(currentUrl, "CompanyCrawler/1.0");
+                            } catch (Exception ignore) {}
+                        }
+                        if (content == null || content.isEmpty()) {
+                            content = htmlParser.fetchHtmlContent(currentUrl);
+                        }
+                        return content;
+                    })
+                );
                 
-                Company company = contactExtractor.extractContacts(htmlContent, currentUrl);
+                // Trace parsing
+                Company company = tracingUtil.trace("parse_contacts", () -> 
+                    parsingTimer.recordCallable(() -> 
+                        contactExtractor.extractContacts(htmlContent, currentUrl)
+                    )
+                );
+                
                 if (company != null) {
-                    saveCompanyIfNew(company);
+                    parsingSuccessCounter.increment();
+                    tracingUtil.trace("save_company", () -> saveCompanyIfNew(company));
+                } else {
+                    parsingErrorCounter.increment();
                 }
                 
-                List<String> newUrls = htmlParser.extractLinks(htmlContent, currentUrl);
+                // Trace link extraction
+                List<String> newUrls = tracingUtil.trace("extract_links", () -> 
+                    htmlParser.extractLinks(htmlContent, currentUrl)
+                );
+                
                 for (String newUrl : newUrls) {
                     if (!visitedUrls.contains(newUrl)) {
                         urlQueue.add(newUrl);
@@ -120,17 +174,22 @@ public class CrawlerService {
                 Thread.sleep(1000);
                 
             } catch (Exception e) {
+                parsingErrorCounter.increment();
                 logger.warn("Failed to crawl URL: {}", currentUrl, e);
             }
         }
     }
     
+    @Transactional
     private void saveCompanyIfNew(Company company) {
-        Optional<Company> existing = companyRepository.findByWebsite(company.getWebsite());
-        if (existing.isEmpty()) {
-            companyRepository.save(company);
-            logger.info("Saved company: {}", company.getName());
-        }
+        databaseSaveTimer.record(() -> {
+            Optional<Company> existing = companyRepository.findByWebsite(company.getWebsite());
+            if (existing.isEmpty()) {
+                companyRepository.save(company);
+                databaseRecordsCounter.increment();
+                logger.info("Saved company: {}", company.getName());
+            }
+        });
     }
     
     public CrawlTask getTaskStatus(String taskId) {

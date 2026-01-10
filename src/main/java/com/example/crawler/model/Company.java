@@ -5,25 +5,42 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "companies")
+@Table(name = "companies", indexes = {
+    @Index(name = "idx_website", columnList = "website"),
+    @Index(name = "idx_name", columnList = "name"),
+    @Index(name = "idx_crawled_at", columnList = "crawled_at")
+})
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @Column(length = 500)
     private String name;
+    
+    @Column(length = 500, unique = true)
     private String website;
     
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "company_phones", indexes = @Index(name = "idx_phone", columnList = "phone"))
+    @Column(name = "phone")
     private List<String> phones;
     
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "company_emails", indexes = @Index(name = "idx_email", columnList = "email"))
+    @Column(name = "email")
     private List<String> emails;
     
+    @Column(length = 1000)
     private String address;
+    
+    @Column(length = 2000)
     private String description;
     
+    @Column(name = "crawled_at")
     private LocalDateTime crawledAt;
+    
+    @Column(name = "source_url", length = 1000)
     private String sourceUrl;
     
     public Company() {}

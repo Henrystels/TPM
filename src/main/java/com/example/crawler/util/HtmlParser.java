@@ -52,32 +52,35 @@ public class HtmlParser {
     }
     
     public List<String> extractLinks(String htmlContent, String baseUrl) {
-        List<String> links = new ArrayList<>();
+        // Use LinkedHashSet to avoid duplicates efficiently
+        java.util.Set<String> linkSet = new java.util.LinkedHashSet<>();
         Matcher matcher = LINK_PATTERN.matcher(htmlContent);
         
         try {
             URL base = new URL(baseUrl);
+            String protocol = base.getProtocol();
+            String host = base.getHost();
             
             while (matcher.find()) {
                 String link = matcher.group(1);
                 
                 if (link.startsWith("/")) {
-                    link = base.getProtocol() + "://" + base.getHost() + link;
+                    link = protocol + "://" + host + link;
                 } else if (link.startsWith("./")) {
-                    link = base.getProtocol() + "://" + base.getHost() + link.substring(1);
+                    link = protocol + "://" + host + link.substring(1);
                 } else if (!link.startsWith("http")) {
-                    link = base.getProtocol() + "://" + base.getHost() + "/" + link;
+                    link = protocol + "://" + host + "/" + link;
                 }
                 
-                if (link.startsWith("http") && !links.contains(link)) {
-                    links.add(link);
+                if (link.startsWith("http")) {
+                    linkSet.add(link);
                 }
             }
             
         } catch (Exception e) {
         }
         
-        return links;
+        return new ArrayList<>(linkSet);
     }
 }
 

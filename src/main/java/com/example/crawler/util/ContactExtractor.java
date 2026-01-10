@@ -51,31 +51,29 @@ public class ContactExtractor {
     }
     
     private List<String> extractPhones(String html) {
-        List<String> phones = new ArrayList<>();
+        // Use LinkedHashSet to maintain order and avoid duplicates efficiently
+        java.util.Set<String> phoneSet = new java.util.LinkedHashSet<>();
         Matcher matcher = PHONE_PATTERN.matcher(html);
         
         while (matcher.find()) {
             String phone = matcher.group().replaceAll("[\\s\\-\\(\\)]", "");
-            if (!phones.contains(phone)) {
-                phones.add(phone);
-            }
+            phoneSet.add(phone);
         }
         
-        return phones;
+        return new ArrayList<>(phoneSet);
     }
     
     private List<String> extractEmails(String html) {
-        List<String> emails = new ArrayList<>();
+        // Use LinkedHashSet to maintain order and avoid duplicates efficiently
+        java.util.Set<String> emailSet = new java.util.LinkedHashSet<>();
         Matcher matcher = EMAIL_PATTERN.matcher(html);
         
         while (matcher.find()) {
             String email = matcher.group().toLowerCase();
-            if (!emails.contains(email)) {
-                emails.add(email);
-            }
+            emailSet.add(email);
         }
         
-        return emails;
+        return new ArrayList<>(emailSet);
     }
     
     private String extractAddress(String html) {

@@ -123,4 +123,133 @@ mvn org.springframework.boot:spring-boot-maven-plugin:2.7.0:run
 - WebFlux + RestTemplate + OpenFeign (с фолбэками) для сетевых запросов
 - Эндпоинты запуска/статуса/получения результатов
 
+## 10) Мониторинг производительности
+
+### Micrometer и Prometheus
+
+Приложение собирает метрики производительности через Micrometer и экспортирует их в формате Prometheus.
+
+**Доступные эндпоинты:**
+- Метрики Prometheus: `http://localhost:8080/actuator/prometheus`
+- Все метрики: `http://localhost:8080/actuator/metrics`
+- Health check: `http://localhost:8080/actuator/health`
+
+**Собранные метрики:**
+- `crawler.parsing.duration` - время выполнения парсинга
+- `crawler.parsing.success` - количество успешных парсингов
+- `crawler.parsing.errors` - количество ошибочных парсингов
+- `crawler.database.records.inserted` - количество записей в БД
+- `crawler.pages.crawled` - количество обработанных страниц
+- `crawler.urls.visited` - количество посещенных URL
+- `crawler.database.save.duration` - время сохранения в БД
+- `crawler.html.fetch.duration` - время получения HTML
+
+### Запуск с мониторингом
+
+**Windows:**
+```powershell
+.\scripts\start-with-monitoring.bat
+```
+
+**Linux/Mac:**
+```bash
+chmod +x scripts/start-with-monitoring.sh
+./scripts/start-with-monitoring.sh
+```
+
+Этот скрипт запускает приложение с:
+- Логированием GC
+- JMX для VisualVM
+- Java Flight Recorder (JFR)
+- Heap dump при OutOfMemoryError
+
+### Prometheus и Grafana
+
+1. **Запуск инфраструктуры мониторинга:**
+```bash
+docker-compose up -d
+```
+
+Это запустит:
+- **Prometheus** на `http://localhost:9090`
+- **Grafana** на `http://localhost:3000` (admin/admin)
+- **Jaeger** на `http://localhost:16686`
+
+2. **Настройка Prometheus:**
+   - Файл `prometheus.yml` уже настроен
+   - Prometheus будет собирать метрики с `/actuator/prometheus`
+
+3. **Импорт дашборда Grafana:**
+   - Войдите в Grafana
+   - Добавьте источник данных Prometheus: `http://prometheus:9090`
+   - Создайте дашборд с метриками из списка выше
+
+### OpenTelemetry и Jaeger
+
+Приложение использует OpenTelemetry для распределенного трейсинга и отправляет трейсы в Jaeger.
+
+**Трейсинг этапов:**
+- `fetch_html` - получение HTML контента
+- `parse_contacts` - парсинг контактов
+- `save_company` - сохранение компании
+- `extract_links` - извлечение ссылок
+
+**Просмотр трейсов:**
+1. Откройте Jaeger UI: `http://localhost:16686`
+2. Выберите сервис `company-crawler`
+3. Нажмите "Find Traces"
+4. Просмотрите временные диаграммы выполнения
+
+### VisualVM и JFR
+
+**Подключение VisualVM:**
+1. Скачайте VisualVM: https://visualvm.github.io/
+2. Запустите приложение с мониторингом (см. выше)
+3. В VisualVM добавьте JMX соединение: `localhost:9999`
+
+**Анализ JFR записей:**
+- Записи сохраняются в `./logs/recording.jfr`
+- Откройте в VisualVM или JDK Mission Control
+
+### JMH Бенчмарки
+
+**Запуск бенчмарков:**
+```bash
+mvn clean package
+java -jar target/benchmarks.jar
+```
+
+Бенчмарки сравнивают производительность разных реализаций парсинга:
+- For Loop
+- Stream API
+- Parallel Stream
+- Оптимизированный Stream
+
+### Документация
+
+Подробная документация доступна в папке `docs/`:
+- `PERFORMANCE_MONITORING.md` - руководство по мониторингу
+- `JVM_SETUP.md` - настройка JVM параметров
+- `PERFORMANCE_REPORT.md` - шаблон отчета о производительности
+
+## 11) Оптимизации производительности
+
+Выполненные оптимизации:
+
+1. **Устранение N+1 запросов:**
+   - Использованы `JOIN FETCH` в запросах
+   - Коллекции загружаются вместе с сущностями
+
+2. **Добавление индексов:**
+   - Индексы на `website`, `name`, `crawledAt`
+   - Индексы на коллекции `phones` и `emails`
+
+3. **Оптимизация аллокаций:**
+   - Использованы `LinkedHashSet` вместо `ArrayList.contains()`
+   - Оптимизированы регулярные выражения
+
+4. **Синхронизация потоков:**
+   - Использованы потокобезопасные структуры данных
+   - Минимизированы блокировки
+
 
